@@ -4,7 +4,7 @@ import DossierView from './components/DossierView';
 import { Mail, Github, Linkedin } from 'lucide-react';
 import { CV_DATA } from './data/cvData';
 // @ts-ignore
-import profilePhoto from './assets/images/profile_photo_1781073187852.png';
+import profilePhoto from './assets/images/AFW09999.JPG';
 
 export default function App() {
   const [accent] = useState<'red' | 'yellow' | 'cyan' | 'green'>('red');
