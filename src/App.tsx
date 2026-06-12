@@ -172,7 +172,7 @@ export default function App() {
             <img 
               src={profilePhoto} 
               alt="Rishikesh Chopade Profile" 
-              className="w-full h-full object-cover grayscale opacity-90 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500 brightness-95 contrast-110"
+              className="w-full h-full object-cover scale-150 translate-x-[90px] translate-y-[85px] grayscale opacity-90 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500 brightness-95 contrast-110"
               referrerPolicy="no-referrer"
             />
           </div>
