@@ -8,7 +8,7 @@ WORKDIR /app
 
 # Copy package files and install dependencies
 # (Using npm ci is strictly better for CI/CD pipelines as it uses the lockfile)
-COPY package.json ./
+COPY package.json package-lock.json ./
 RUN npm ci
 
 # Copy the rest of your source code
