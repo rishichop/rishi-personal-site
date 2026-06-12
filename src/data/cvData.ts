@@ -75,7 +75,7 @@ export const CV_DATA: CVData = {
   email: "chopaderishikesh@gmail.com",
   socials: {
     github: "https://github.com/rishichop",
-    linkedin: "https://linkedin.com/in/rishikesh-chopade-4a11b0258" // Clean placeholder or searchable profile URL
+    linkedin: "https://linkedin.com/in/rishikesh-chopade-632a86290" // Clean placeholder or searchable profile URL
   },
   experiences: [
     {
