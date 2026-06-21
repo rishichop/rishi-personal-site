@@ -1,68 +1,36 @@
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import { motion } from 'motion/react';
-import { Mail, Github, Linkedin, Briefcase, GraduationCap, Code, FileText, Award, ChevronRight, ExternalLink, Calendar, MapPin, Globe } from 'lucide-react';
+import { Github, ExternalLink, Calendar, MapPin } from 'lucide-react';
 import { CV_DATA } from '../data/cvData';
-// @ts-ignore
-import profilePhoto from '../assets/images/profile_photo_1781073187852.png';
 
 interface DossierViewProps {
   accent: 'red' | 'yellow' | 'cyan' | 'green';
   isLightMode?: boolean;
 }
 
-export default function DossierView({ accent, isLightMode = false }: DossierViewProps) {
+/* Self-contained panel: header on top, content below — pairs two-across like intro/groundwork */
+function PanelSection({ id, index, title, caption, children }: {
+  id?: string; index: string; title: string; caption?: string; children: ReactNode;
+}) {
+  return (
+    <section id={id} className="flex flex-col">
+      <div className="flex items-end justify-between gap-3 border-b border-brand-line pb-2.5 mb-5">
+        <div className="flex items-baseline gap-3">
+          <span className="font-mono text-xs text-brand-orange">{index}</span>
+          <h2 className="font-display uppercase tracking-tight text-brand-cream text-2xl sm:text-3xl bracket leading-none">
+            {title}
+          </h2>
+        </div>
+        {caption && <span className="font-hand text-brand-tan text-lg -rotate-1 shrink-0 pb-0.5">{caption}</span>}
+      </div>
+      <div className="flex-1">{children}</div>
+    </section>
+  );
+}
+
+export default function DossierView({ }: DossierViewProps) {
   const [hoveredSkill, setHoveredSkill] = useState<string | null>(null);
-  const [expandedExperience, setExpandedExperience] = useState<number | null>(null);
 
-  // Dynamic system styling resolver
-  const s = {
-    red: {
-      text: 'text-brand-red',
-      border: 'border-brand-red/50',
-      borderSolid: 'border-brand-red',
-      bg: 'bg-brand-red',
-      hoverText: 'group-hover:text-brand-red',
-      hoverBorder: 'hover:border-brand-red/60',
-      bgAlpha: 'bg-brand-red/5',
-      badge: 'bg-brand-red/10 text-brand-red border-brand-red/20',
-      bullet: 'bg-brand-red'
-    },
-    yellow: {
-      text: 'text-brand-yellow',
-      border: 'border-brand-yellow/40',
-      borderSolid: 'border-brand-yellow',
-      bg: 'bg-brand-yellow',
-      hoverText: 'group-hover:text-brand-yellow',
-      hoverBorder: 'hover:border-brand-yellow/50',
-      bgAlpha: 'bg-brand-yellow/5',
-      badge: 'bg-brand-yellow/10 text-brand-yellow border-brand-yellow/20',
-      bullet: 'bg-brand-yellow'
-    },
-    cyan: {
-      text: 'text-cyan-400',
-      border: 'border-cyan-500/30',
-      borderSolid: 'border-cyan-400',
-      bg: 'bg-cyan-500',
-      hoverText: 'group-hover:text-cyan-400',
-      hoverBorder: 'hover:border-cyan-500/50',
-      bgAlpha: 'bg-cyan-500/5',
-      badge: 'bg-cyan-950/45 text-cyan-400 border-cyan-500/20',
-      bullet: 'bg-cyan-400'
-    },
-    green: {
-      text: 'text-emerald-400',
-      border: 'border-emerald-500/30',
-      borderSolid: 'border-emerald-400',
-      bg: 'bg-emerald-500',
-      hoverText: 'group-hover:text-emerald-400',
-      hoverBorder: 'hover:border-emerald-500/50',
-      bgAlpha: 'bg-emerald-500/5',
-      badge: 'bg-emerald-950/45 text-emerald-400 border-emerald-500/20',
-      bullet: 'bg-emerald-400'
-    }
-  }[accent];
-
-  // Organize skills conceptually so they are presented in a highly cohesive layout
   const groupedSkills = {
     languages: ["Python", "JavaScript", "C++", "Object Oriented Programming"],
     web: ["React.js", "Node.js", "Web Development", "Docker"],
@@ -71,286 +39,191 @@ export default function DossierView({ accent, isLightMode = false }: DossierView
   };
 
   return (
-    <div className="space-y-16 lg:space-y-24 pt-4">
-      {/* 2. Work Experience Chronological Timeline */}
-      <section id="experience" className="space-y-8 relative">
-        <div className="flex items-center gap-3 border-b border-zinc-900 pb-2">
-          <Briefcase size={14} className={s.text} />
-          <h2 className="text-xs uppercase tracking-[0.3em] text-zinc-400 font-bold">
-            01_PROFESSIONAL_JOURNEY
-          </h2>
-        </div>
+    <div className="space-y-20 md:space-y-28">
 
-        <div className="relative border-l border-zinc-900 ml-3 pl-6 space-y-12">
-          {CV_DATA.experiences.map((exp, idx) => {
-            const isExpanded = expandedExperience === idx;
-            return (
-              <motion.div 
-                key={idx} 
-                className="group relative"
-                layout="position"
-              >
-                {/* Timeline Bullet Accent */}
-                <div className={`absolute -left-[30px] top-1.5 w-2 h-2 rounded-full border border-black group-hover:scale-125 transition-all ${s.bullet}`} />
+      {/* PAGE — Field Log + Builds */}
+      <div className="grid md:grid-cols-2 gap-x-10 gap-y-16 items-start">
 
-                <div className="space-y-2">
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 select-none">
-                    <h3 className="text-lg font-bold text-zinc-100 group-hover:text-white transition-colors flex items-center gap-2">
-                      <span className={`${s.hoverText} transition-colors`}>{exp.role}</span>
-                      <span className="text-zinc-500 font-light text-sm">@ {exp.company}</span>
-                    </h3>
-                    <div className="flex items-center gap-3 text-zinc-500 text-xs font-mono">
-                      <span className="flex items-center gap-1">
-                        <Calendar size={11} className="text-zinc-650" />
-                        {exp.period}
-                      </span>
-                    </div>
-                  </div>
+      {/* 01 — FIELD LOG */}
+      <PanelSection id="experience" index="01" title="Field Log" caption="where I've worked">
+        <div className="relative border-l border-brand-line ml-3 pl-7 space-y-10">
+          {CV_DATA.experiences.map((exp, idx) => (
+            <motion.div key={idx} className="group relative" layout="position">
+              <div className="absolute -left-[34px] top-1.5 w-2.5 h-2.5 rounded-full bg-brand-orange border-2 border-brand-black group-hover:scale-125 transition-all" />
 
-                  {/* Location indicator */}
-                  <div className="flex items-center gap-1.5 text-zinc-500 text-[11px] font-mono leading-none select-none">
-                    <MapPin size={10} className={s.text} />
-                    <span>{exp.location}</span>
-                  </div>
-
-                  {/* 2-line description paragraph instead of bullet points */}
-                  <p className="text-xs text-zinc-400 leading-relaxed font-sans pt-1 max-w-3xl select-text">
-                    {exp.description}
-                  </p>
-                </div>
-              </motion.div>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* 3. Academic Dossier Section */}
-      <section className="space-y-8">
-        <div className="flex items-center gap-3 border-b border-zinc-900 pb-2">
-          <GraduationCap size={14} className={s.text} />
-          <h2 className="text-xs uppercase tracking-[0.3em] text-zinc-400 font-bold">
-            02_ACADEMIC_CREDENTIALS
-          </h2>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {CV_DATA.education.map((edu, idx) => (
-            <div 
-              key={idx} 
-              className="border border-zinc-900 bg-brand-gray/20 hover:border-zinc-800 transition-all p-4 rounded-sm flex flex-col justify-between group"
-            >
-              <div>
-                <span className="text-[9px] font-mono text-zinc-500 uppercase block mb-1">
-                  {edu.period} // {edu.location}
-                </span>
-                <h3 className="text-sm font-bold text-zinc-100 group-hover:text-white transition-colors">
-                  {edu.degree}
+              <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1">
+                <h3 className="text-lg font-bold text-brand-cream flex flex-wrap items-baseline gap-2">
+                  <span className="group-hover:text-brand-orange transition-colors">{exp.role}</span>
+                  <span className="text-brand-dim font-normal text-sm">@ {exp.company}</span>
                 </h3>
-                <p className={`text-xs font-mono mt-1 ${s.text}`}>
-                  {edu.institution}
-                </p>
+                <span className="flex items-center gap-1.5 text-brand-dim text-xs font-mono shrink-0">
+                  <Calendar size={11} className="text-brand-tan" />
+                  {exp.period}
+                </span>
               </div>
 
-              {/* Academic references removed as requested */}
+              <div className="flex items-center gap-1.5 text-brand-dim text-[11px] font-mono mt-1.5">
+                <MapPin size={10} className="text-brand-orange" />
+                <span>{exp.location}</span>
+              </div>
+
+              <p className="text-sm text-brand-cream/70 leading-relaxed mt-3">
+                {exp.description}
+              </p>
+
+              {exp.note && (
+                <p className="font-hand text-brand-tan text-xl mt-3 -rotate-1">↳ {exp.note}</p>
+              )}
+            </motion.div>
+          ))}
+        </div>
+      </PanelSection>
+
+      {/* 02 — BUILDS */}
+      <PanelSection id="projects" index="02" title="Builds" caption="things I've shipped">
+        <div className="space-y-6">
+          {CV_DATA.projects.map((proj, idx) => (
+            <div key={idx} className="border border-brand-line bg-brand-card/70 p-6 rounded-sm relative overflow-hidden group hover:border-brand-orange/50 transition-all">
+              <div className="absolute top-0 right-0 w-14 h-14 pointer-events-none opacity-30 group-hover:opacity-60 transition-opacity">
+                <div className="absolute top-3 right-3 w-3 h-3 border-t border-r border-brand-orange" />
+              </div>
+
+              <span className="font-mono text-[10px] text-brand-dim uppercase tracking-wider block mb-2">
+                Build · {proj.period}
+              </span>
+
+              <h3 className="font-display uppercase text-xl sm:text-2xl text-brand-cream tracking-tight leading-tight">
+                {proj.title}
+              </h3>
+
+              {proj.note && (
+                <p className="font-hand text-brand-tan text-xl mt-2 -rotate-1">{proj.note}</p>
+              )}
+
+              <div className="flex flex-wrap gap-1.5 my-4">
+                {proj.technologies.map((tech, tIdx) => (
+                  <span key={tIdx} className="font-mono text-[10px] px-2 py-0.5 rounded-sm border border-brand-orange/25 bg-brand-orange/10 text-brand-orange">
+                    {tech}
+                  </span>
+                ))}
+              </div>
+
+              <ul className="space-y-2 text-sm text-brand-cream/70 leading-relaxed">
+                {proj.description.map((desc, dIdx) => (
+                  <li key={dIdx} className="flex gap-3">
+                    <span className="w-1.5 h-1.5 rounded-full bg-brand-orange shrink-0 mt-2" />
+                    <span>{desc}</span>
+                  </li>
+                ))}
+              </ul>
+
+              {proj.link && (
+                <div className="mt-5 border-t border-brand-line pt-4">
+                  <a href={proj.link} target="_blank" rel="noreferrer"
+                    className="font-mono text-xs flex items-center gap-1.5 w-fit text-brand-orange hover:underline">
+                    <Github size={13} />
+                    <span>View the code</span>
+                    <ExternalLink size={10} />
+                  </a>
+                </div>
+              )}
             </div>
           ))}
         </div>
-      </section>
+      </PanelSection>
 
-      {/* 4. Production Engineering Project */}
-      <section id="projects" className="space-y-8">
-        <div className="flex items-center gap-3 border-b border-zinc-900 pb-2">
-          <Code size={14} className={s.text} />
-          <h2 className="text-xs uppercase tracking-[0.3em] text-zinc-400 font-bold">
-            03_PRODUCTION_CHANNELS
-          </h2>
-        </div>
+      </div>
 
-        {CV_DATA.projects.map((proj, idx) => (
-          <div 
-            key={idx} 
-            className="border border-zinc-900 bg-brand-gray/40 p-5 rounded-sm relative overflow-hidden group hover:border-zinc-800/80 transition-all"
-          >
-            {/* Graphic Corner Accent inspired by Doctor / Qingbo */}
-            <div className="absolute top-0 right-0 w-16 h-16 pointer-events-none select-none opacity-20 group-hover:opacity-40 transition-opacity">
-              <div className="absolute top-0 right-0 border-t border-r border-brand-red w-4 h-4" />
-              <div className="absolute top-0 right-0 text-[7px] p-1 font-mono text-right text-brand-red">GEO_IP</div>
-            </div>
+      {/* PAGE — On the Record + Toolkit */}
+      <div className="grid md:grid-cols-2 gap-x-10 gap-y-16 items-start">
 
-            <span className="text-[10px] font-mono text-zinc-500 block mb-1">
-              Active Project: {proj.period}
-            </span>
-
-            <h3 className="text-xl sm:text-2xl font-sans font-bold text-white tracking-tight flex items-center gap-2">
-              <span>{proj.title}</span>
-            </h3>
-
-            {/* Badges */}
-            <div className="flex flex-wrap gap-1.5 my-3 select-none">
-              {proj.technologies.map((tech, tIdx) => (
-                <span 
-                  key={tIdx}
-                  className={`text-[9.5px] font-mono px-2 py-0.5 rounded-sm border ${s.badge}`}
-                >
-                  {tech}
-                </span>
-              ))}
-            </div>
-
-            {/* Descriptions */}
-            <ul className="space-y-2 text-xs text-zinc-400 font-sans leading-relaxed select-text">
-              {proj.description.map((desc, dIdx) => (
-                <li key={dIdx} className="flex gap-2.5">
-                  <span className={`w-1.5 h-1.5 rounded-full shrink-0 mt-1.5 ${s.bullet}`} />
-                  <span>{desc}</span>
-                </li>
-              ))}
-            </ul>
-
-            {proj.link && (
-              <div className="mt-5 border-t border-zinc-950 pt-3 select-none">
-                <a 
-                  href={proj.link} 
-                  target="_blank" 
-                  rel="noreferrer" 
-                  className={`text-xs font-mono flex items-center gap-1.5 w-fit hover:underline ${s.text}`}
-                >
-                  <Github size={13} />
-                  <span>Retrieve Code Repository</span>
-                  <ExternalLink size={10} />
-                </a>
-              </div>
-            )}
-          </div>
-        ))}
-      </section>
-
-      {/* 5. Peer-Reviewed Publications */}
-      <section className="space-y-8">
-        <div className="flex items-center gap-3 border-b border-zinc-900 pb-2">
-          <FileText size={14} className={s.text} />
-          <h2 className="text-xs uppercase tracking-[0.3em] text-zinc-400 font-bold">
-            04_RESEARCH_REPORTS
-          </h2>
-        </div>
-
-        {CV_DATA.publications.map((pub, idx) => (
-          <div 
-            key={idx} 
-            className="border border-l-2 border-zinc-900 bg-brand-gray/20 p-4 rounded-sm hover:border-l-brand-red transition-all group"
-            style={{ borderLeftColor: s.text.includes('red') ? '#EF4444' : s.text.includes('yellow') ? '#f4c430' : s.text.includes('cyan') ? '#22d3ee' : '#34d153' }}
-          >
-            <span className="text-[9px] font-mono text-zinc-650 uppercase block mb-1">
-              PUBLISHED_YEAR: {pub.year} // JOURNAL RECORD
-            </span>
-
-            <h3 className="text-sm font-bold text-zinc-100 group-hover:text-white transition-colors leading-snug">
-              &quot;{pub.title}&quot;
-            </h3>
-
-            {/* Info */}
-            <div className="text-xs font-mono text-zinc-400 mt-2 select-text">
-              <span className="text-zinc-600 font-bold">AUTHORS: </span>
-              {pub.authors}
-            </div>
-
-            <div className="text-[11px] font-mono text-zinc-500 mt-1.5 flex flex-wrap gap-2 select-text">
-              <span className="px-1.5 py-0.2 bg-black rounded border border-zinc-900 text-[10px]">
-                {pub.publisher}
+      {/* 03 — ON THE RECORD */}
+      <PanelSection index="03" title="On the Record" caption="published research">
+        <div className="space-y-6">
+          {CV_DATA.publications.map((pub, idx) => (
+            <div key={idx} className="border-l-2 border-brand-orange bg-brand-card/50 p-5 rounded-sm hover:bg-brand-gray transition-colors group">
+              <span className="font-mono text-[9px] text-brand-dim uppercase tracking-wider block mb-2">
+                {pub.year} · Journal Record
               </span>
-              <span>&bull;</span>
-              <span>{pub.citation}</span>
+              <h3 className="text-base font-bold text-brand-cream group-hover:text-white transition-colors leading-snug">
+                &ldquo;{pub.title}&rdquo;
+              </h3>
+              <div className="text-xs font-mono text-brand-cream/70 mt-3">
+                <span className="text-brand-dim">Authors: </span>{pub.authors}
+              </div>
+              <div className="text-[11px] font-mono text-brand-dim mt-2 flex flex-wrap items-center gap-2">
+                <span className="px-2 py-0.5 bg-brand-black rounded border border-brand-line text-brand-tan">
+                  {pub.publisher}
+                </span>
+                <span>·</span>
+                <span>{pub.citation}</span>
+              </div>
             </div>
-          </div>
-        ))}
-      </section>
-
-      {/* 6. Technical Stack Grid */}
-      <section className="space-y-8">
-        <div className="flex items-center gap-3 border-b border-zinc-900 pb-2">
-          <Award size={14} className={s.text} />
-          <h2 className="text-xs uppercase tracking-[0.3em] text-zinc-400 font-bold">
-            05_TECHNICAL_ASSET_MATRICES
-          </h2>
+          ))}
         </div>
+      </PanelSection>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+      {/* 04 — TOOLKIT */}
+      <PanelSection id="toolkit" index="04" title="Toolkit" caption="what I reach for">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {[
             { id: 'languages', title: 'Languages & Core', items: groupedSkills.languages },
-            { id: 'web', title: 'Web Frameworks', items: groupedSkills.web },
-            { id: 'intelligence', title: 'Maths & AI Systems', items: groupedSkills.intelligence },
-            { id: 'cognitive', title: 'Cooperative / Process', items: groupedSkills.cognitive }
+            { id: 'web', title: 'Web & Infra', items: groupedSkills.web },
+            { id: 'intelligence', title: 'Data & AI', items: groupedSkills.intelligence },
+            { id: 'cognitive', title: 'Ways of Working', items: groupedSkills.cognitive }
           ].map((cat) => (
-            <div key={cat.id} className="border border-zinc-900 bg-zinc-950/25 p-4 rounded-sm space-y-3">
-              <span className="text-[10px] uppercase font-mono tracking-wider text-zinc-500 font-bold block border-b border-zinc-900 pb-1">
+            <div key={cat.id} className="border border-brand-line bg-brand-card/40 p-4 rounded-sm space-y-3">
+              <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-brand-tan font-bold block border-b border-brand-line pb-2">
                 {cat.title}
               </span>
               <div className="space-y-1.5">
                 {cat.items.map((item, idx) => (
-                  <div
-                    key={idx}
+                  <div key={idx}
                     onMouseEnter={() => setHoveredSkill(item)}
                     onMouseLeave={() => setHoveredSkill(null)}
-                    className={`p-2 bg-brand-gray border border-zinc-900 rounded-sm hover:-translate-y-0.5 transition-all text-xs flex justify-between items-center group/skill cursor-default text-zinc-300 font-mono select-none ${hoveredSkill === item ? 'border-brand-red/30' : ''}`}
-                  >
-                    <span className="truncate group-hover/skill:text-white transition-colors">{item}</span>
-                    <span className={`w-1 h-3 shrink-0 opacity-45 group-hover/skill:opacity-100 transition-opacity ${s.bg}`} />
+                    className={`p-2.5 bg-brand-gray border rounded-sm hover:-translate-y-0.5 transition-all text-xs flex justify-between items-center cursor-default text-brand-cream/80 font-mono ${hoveredSkill === item ? 'border-brand-orange/50' : 'border-brand-line'}`}>
+                    <span className="truncate">{item}</span>
+                    <span className="w-1 h-3 shrink-0 bg-brand-orange opacity-50" />
                   </div>
                 ))}
               </div>
             </div>
           ))}
         </div>
-      </section>
+      </PanelSection>
 
-      {/* 7. Certifications & Spoken Languages */}
-      <section className="grid grid-cols-1 md:grid-cols-12 gap-8">
-        {/* Left Col: Certifications */}
-        <div className="md:col-span-7 space-y-6">
-          <div className="flex items-center gap-3 border-b border-zinc-900 pb-2">
-            <Award size={14} className={s.text} />
-            <span className="text-xs uppercase tracking-[0.3em] text-zinc-400 font-bold">
-              06_QUALIFIED_CERTIFICATIONS
-            </span>
-          </div>
+      </div>
 
-          <div className="space-y-2.5">
-            {CV_DATA.certifications.map((cert, idx) => (
-              <div 
-                key={idx} 
-                className="p-3 bg-brand-gray border border-zinc-900 rounded-sm hover:border-zinc-850 flex items-center gap-3 transition-colors text-xs text-zinc-300 select-all"
-              >
-                <div className={`p-1 bg-black rounded border border-zinc-900 font-bold text-[10px] ${s.text}`}>
-                  {(idx + 1).toString().padStart(2, '0')}
-                </div>
-                <span>{cert}</span>
-              </div>
-            ))}
-          </div>
+      {/* PAGE — Credentials + Spoken */}
+      <div className="grid md:grid-cols-2 gap-x-10 gap-y-16 items-start">
+
+      {/* 05 — CREDENTIALS */}
+      <PanelSection index="05" title="Credentials" caption="on paper">
+        <div className="space-y-2.5">
+          {CV_DATA.certifications.map((cert, idx) => (
+            <div key={idx} className="p-3 bg-brand-card border border-brand-line rounded-sm hover:border-brand-orange/40 flex items-center gap-3 transition-colors text-xs text-brand-cream/80">
+              <span className="px-1.5 py-1 bg-brand-black rounded border border-brand-line font-mono font-bold text-[10px] text-brand-orange shrink-0">
+                {(idx + 1).toString().padStart(2, '0')}
+              </span>
+              <span>{cert}</span>
+            </div>
+          ))}
         </div>
+      </PanelSection>
 
-        {/* Right Col: Languages */}
-        <div className="md:col-span-1" />
-        <div className="md:col-span-4 space-y-6">
-          <div className="flex items-center gap-3 border-b border-zinc-900 pb-2">
-            <Globe size={14} className={s.text} />
-            <span className="text-xs uppercase tracking-[0.3em] text-zinc-400 font-bold">
-              07_COOPERATIVE_LANGUAGES
-            </span>
-          </div>
-
-          <div className="space-y-3 font-mono">
-            {CV_DATA.languages.map((lang, idx) => (
-              <div key={idx} className="border border-zinc-900/50 p-3 bg-brand-gray/10 rounded-sm">
-                <div className="flex justify-between items-center text-xs select-none">
-                  <span className="text-zinc-200 font-bold">{lang.name}</span>
-                  <span className={`text-[10px] ${s.text}`}>{lang.proficiency}</span>
-                </div>
-              </div>
-            ))}
-          </div>
+      {/* 06 — SPOKEN */}
+      <PanelSection index="06" title="Spoken" caption="languages I speak">
+        <div className="space-y-3 font-mono">
+          {CV_DATA.languages.map((lang, idx) => (
+            <div key={idx} className="border border-brand-line p-4 bg-brand-card/40 rounded-sm flex justify-between items-center">
+              <span className="text-brand-cream font-bold text-sm">{lang.name}</span>
+              <span className="text-[10px] text-brand-orange">{lang.proficiency}</span>
+            </div>
+          ))}
         </div>
-      </section>
+      </PanelSection>
+
+      </div>
     </div>
   );
 }

@@ -5,6 +5,7 @@ export interface WorkingExperience {
   period: string;
   highlights: string[];
   description: string;
+  note?: string;
 }
 
 export interface Education {
@@ -23,6 +24,7 @@ export interface Project {
   description: string[];
   technologies: string[];
   link?: string;
+  note?: string;
 }
 
 export interface Publication {
@@ -84,7 +86,8 @@ export const CV_DATA: CVData = {
       role: "Data Scientist Intern",
       period: "03/2026 – Current",
       highlights: [],
-      description: "Researching and developing Hybrid AI frameworks to automate industrial visual inspection and reduce false positives. Designing real-time analytics dashboards to optimize raw material supply chain logistics."
+      description: "Researching and developing Hybrid AI frameworks to automate industrial visual inspection and reduce false positives. Designing real-time analytics dashboards to optimize raw material supply chain logistics.",
+      note: "the deep end — exactly where I wanted to be."
     },
     {
       company: "Adivid Technologies",
@@ -92,7 +95,8 @@ export const CV_DATA: CVData = {
       role: "Web Development Intern",
       period: "07/2025 – 12/2025",
       highlights: [],
-      description: "Architected and optimized 'The Hub' platform, managing RESTful APIs and modernizing legacy React.js components. Engineered smooth, high-availability visual workflows for tracking student enrollments."
+      description: "Architected and optimized 'The Hub' platform, managing RESTful APIs and modernizing legacy React.js components. Engineered smooth, high-availability visual workflows for tracking student enrollments.",
+      note: "learned to ship on a real team here."
     },
     {
       company: "Arohi Softwares",
@@ -100,7 +104,8 @@ export const CV_DATA: CVData = {
       role: "Web Development Intern",
       period: "08/2024 – 11/2024",
       highlights: [],
-      description: "Engineered backend Flask features and processed large dairy agriculture datasets using Pandas. Built responsive browser UI-components using CSS, JS, and Jinja2 templates."
+      description: "Engineered backend Flask features and processed large dairy agriculture datasets using Pandas. Built responsive browser UI-components using CSS, JS, and Jinja2 templates.",
+      note: "my first taste of real production data."
     }
   ],
   education: [
@@ -136,7 +141,8 @@ export const CV_DATA: CVData = {
         "Monitored live login attempt streams and applied cryptographic data hashing and secure TLS handshakes."
       ],
       technologies: ["Python (Flask)", "PostgreSQL", "Google Maps API", "TOTP", "HTML5", "CSS3", "JavaScript"],
-      link: "https://github.com/rishichop/BE_Project"
+      link: "https://github.com/rishichop/BE_Project",
+      note: "the one I'm proudest of so far."
     }
   ],
   publications: [

@@ -1,83 +1,108 @@
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Archivo:wght@400;500;600;700;800;900&family=Anton&family=Caveat:wght@500;600;700&display=swap');
 @import "tailwindcss";
 
 @theme {
   --color-white: #ffffff;
   --color-black: #000000;
-  
+
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
-  --font-sans: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
-  
-  --color-brand-black: #0A0A0A;
-  --color-brand-card: #121214;
-  --color-brand-red: #EF4444;
-  --color-brand-yellow: #ca8a04;
-  --color-brand-gray: #16161a;
-  --color-brand-text-dim: #8b8d99;
+  --font-sans: 'Archivo', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Anton', 'Archivo', sans-serif;
+  --font-hand: 'Caveat', cursive;
+
+  /* Warm industrial spec-sheet palette (United Drone Company) */
+  --color-brand-black: #161009;   /* deep warm brown-black page */
+  --color-brand-card: #1f160d;    /* panel / card */
+  --color-brand-gray: #241a10;    /* raised surface */
+  --color-brand-line: #3a2c1c;    /* hairline borders */
+
+  --color-brand-orange: #ea580c;  /* hot accent */
+  --color-brand-orange-soft: #f97316;
+  --color-brand-tan: #c9b48f;     /* secondary labels */
+  --color-brand-cream: #ede3d0;   /* primary text */
+  --color-brand-dim: #8b7a5e;     /* muted text */
+
+  /* Back-compat alias: old code referenced brand-red; now warm orange */
+  --color-brand-red: #ea580c;
+  --color-brand-yellow: #c9b48f;
 }
 
 @layer base {
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: 5.5rem; /* clear the fixed nav + marquee on anchor jumps */
   }
-  
+
   body {
     background-color: var(--color-brand-black);
-    color: var(--color-zinc-100);
-    font-family: var(--font-mono);
+    color: var(--color-brand-cream);
+    font-family: var(--font-sans);
     overflow-x: hidden;
   }
 
-
-  /* Custom high-tech scrollbar with satisfying weight */
+  /* Custom industrial scrollbar */
   ::-webkit-scrollbar {
     width: 10px;
     height: 10px;
   }
   ::-webkit-scrollbar-track {
     background: var(--color-brand-black);
-    border-left: 1px solid rgba(160, 160, 170, 0.2);
-    border-top: 1px solid rgba(160, 160, 170, 0.2);
+    border-left: 1px solid var(--color-brand-line);
   }
   ::-webkit-scrollbar-thumb {
-    background: var(--color-zinc-600);
+    background: var(--color-brand-line);
     border: 2px solid var(--color-brand-black);
     border-radius: 9999px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: var(--color-brand-red);
+    background: var(--color-brand-orange);
   }
 }
 
-/* Technical grid background pattern */
+/* Fine technical grid */
 .hud-grid-bg {
-  background-image: 
-    linear-gradient(to right, rgba(239, 68, 68, 0.03) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(239, 68, 68, 0.03) 1px, transparent 1px);
-  background-size: 40px 40px;
+  background-image:
+    linear-gradient(to right, rgba(234, 88, 12, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(234, 88, 12, 0.05) 1px, transparent 1px);
+  background-size: 44px 44px;
 }
 
+/* Halftone dot field — signature UDC texture */
 .hud-dots {
-  background-image: radial-gradient(var(--color-zinc-800) 1px, transparent 1px);
-  background-size: 32px 32px;
+  background-image: radial-gradient(rgba(201, 180, 143, 0.18) 1px, transparent 1.4px);
+  background-size: 9px 9px;
 }
 
 .crt-scanlines {
   background: linear-gradient(
-    rgba(18, 16, 16, 0) 50%, 
-    rgba(0, 0, 0, 0.15) 50%
-  ), linear-gradient(
-    90deg, 
-    rgba(239, 68, 68, 0.03), 
-    rgba(0, 255, 0, 0.01), 
-    rgba(0, 0, 255, 0.03)
+    rgba(0, 0, 0, 0) 50%,
+    rgba(0, 0, 0, 0.16) 50%
   );
-  background-size: 100% 4px, 6px 100%;
+  background-size: 100% 3px;
 }
 
-/* Custom interactive selection highlights */
 ::selection {
-  background-color: var(--color-brand-red);
-  color: #ffffff;
+  background-color: var(--color-brand-orange);
+  color: #160d05;
 }
 
+/* Bracketed display header used across sections */
+.bracket::before { content: "[ "; color: var(--color-brand-orange); }
+.bracket::after  { content: " ]"; color: var(--color-brand-orange); }
+
+/* Animated marquee strip (status ticker) */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.animate-marquee {
+  animation: marquee 28s linear infinite;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in {
+  animation: fade-in 0.7s ease-out both;
+}
